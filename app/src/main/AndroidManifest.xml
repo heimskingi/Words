@@ -9,17 +9,22 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Words">
-        <activity android:name=".Difficulty"></activity>
-        <activity android:name=".Achievements" />
-        <activity android:name=".Game" />
-        <activity android:name=".LeaderBoard" />
-        <activity android:name=".MainActivity2" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".Difficulty"
+            android:exported="true"/>
+        <activity android:name=".Achievements"
+            android:exported="true"/>
+        <activity android:name=".Game"
+            android:exported="true"/>
+        <activity android:name=".LeaderBoard"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity android:name=".MainActivity"
+            android:exported="true">
         </activity>
 
         <meta-data
