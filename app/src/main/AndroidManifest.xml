@@ -9,23 +9,34 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Words">
-        <activity android:name=".Difficulty"
-            android:exported="true"/>
-        <activity android:name=".Achievements"
-            android:exported="true"/>
-        <activity android:name=".Game"
-            android:exported="true"/>
-        <activity android:name=".LeaderBoard"
+        <activity
+            android:name=".UserLogin"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
         </activity>
-        <activity android:name=".MainActivity"
+        <activity
+            android:name=".Difficulty"
+            android:exported="true" />
+        <activity
+            android:name=".Achievements"
+            android:exported="true" />
+        <activity
+            android:name=".Game"
+            android:exported="true" />
+        <activity
+            android:name=".LeaderBoard"
             android:exported="true">
         </activity>
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"></activity>
 
         <meta-data
             android:name="preloaded_fonts"

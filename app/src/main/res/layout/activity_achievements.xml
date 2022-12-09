@@ -51,17 +51,20 @@
 
     <TextView
         android:id="@+id/highScore"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="116dp"
-        android:layout_marginLeft="116dp"
-        android:layout_marginTop="188dp"
+        android:layout_width="250dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="88dp"
+        android:layout_marginLeft="88dp"
+        android:layout_marginTop="180dp"
+        android:background="@drawable/titlebg"
         android:fontFamily="@font/orbitron"
-        android:text="My high score:"
-        android:textColor="#24FF00"
         android:inputType="none"
+        android:text="My high score:"
+        android:textAlignment="center"
+        android:textColor="#DB73FF"
         android:textSize="25sp"
         android:textStyle="bold"
+        app:flow_verticalAlign="center"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
