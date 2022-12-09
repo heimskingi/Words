@@ -3,13 +3,13 @@ package com.example.words;
 public class Word {
 
     public String serbianWord, englishWord;
-    public int wordPoints, userID;
+    public int wordPoints, level;
 
-    public Word(String serbianWord, String englishWord, int wordPoints, int userID) {
+    public Word(String serbianWord, String englishWord, int wordPoints, int level) {
         this.serbianWord = serbianWord;
         this.englishWord = englishWord;
         this.wordPoints = wordPoints;
-        this.userID = userID;
+        this.level = level;
     }
 
     public String getSerbianWord() {
@@ -36,11 +36,11 @@ public class Word {
         this.wordPoints = wordPoints;
     }
 
-    public int getUserID() {
-        return userID;
+    public int getLevel() {
+        return level;
     }
 
-    public void setUserID(int userID) {
-        this.userID = userID;
+    public void setLevel(int level) {
+        this.level = level;
     }
 }
