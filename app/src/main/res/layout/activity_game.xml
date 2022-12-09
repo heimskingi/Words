@@ -27,7 +27,8 @@
         android:background="@android:color/transparent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/settingsblack" />
+        app:srcCompat="@drawable/settingsblack"
+        android:onClick="openMenu"/>
 
     <TextView
         android:id="@+id/wordSpace"

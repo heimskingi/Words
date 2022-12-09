@@ -35,4 +35,19 @@ public class MainActivity extends AppCompatActivity {
         Intent i = new Intent(MainActivity.this, LeaderBoard.class);
         startActivity(i);
     }
+
+    public void openDifficulty(View view) {
+        Intent i = new Intent(MainActivity.this, Difficulty.class);
+        startActivity(i);
+    }
+
+    public void openLeaderBoard(View view) {
+        Intent i = new Intent(MainActivity.this, LeaderBoard.class);
+        startActivity(i);
+    }
+
+    public void openAchievements(View view) {
+        Intent i = new Intent(MainActivity.this, Achievements.class);
+        startActivity(i);
+    }
 }

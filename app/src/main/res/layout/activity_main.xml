@@ -35,7 +35,8 @@
         android:textSize="25sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:onClick="openDifficulty"/>
 
     <Button
         android:id="@+id/leaderboardButton"
@@ -54,7 +55,8 @@
         android:textColor="#24FF00"
         android:textSize="25sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:onClick="openLeaderBoard"/>
 
     <Button
         android:id="@+id/achievementsButton"
@@ -73,7 +75,8 @@
         android:textColor="#24FF00"
         android:textSize="25sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:onClick="openAchievements"/>
 
     <Button
         android:id="@+id/settingsButton"
