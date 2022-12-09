@@ -3,10 +3,15 @@ package com.example.words;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -49,5 +54,29 @@ public class MainActivity extends AppCompatActivity {
     public void openAchievements(View view) {
         Intent i = new Intent(MainActivity.this, Achievements.class);
         startActivity(i);
+    }
+
+    public void changeToEnglish(View view) {
+        Locale myLocale = new Locale("en");
+        Resources res = getResources();
+        DisplayMetrics dm = res.getDisplayMetrics();
+        Configuration conf = res.getConfiguration();
+        conf.locale = myLocale;
+        res.updateConfiguration(conf, dm);
+        Intent refresh = new Intent(this, MainActivity.class);
+        finish();
+        startActivity(refresh);
+    }
+
+    public void changeToSerbian(View view) {
+        Locale myLocale = new Locale("sr");
+        Resources res = getResources();
+        DisplayMetrics dm = res.getDisplayMetrics();
+        Configuration conf = res.getConfiguration();
+        conf.locale = myLocale;
+        res.updateConfiguration(conf, dm);
+        Intent refresh = new Intent(this, MainActivity.class);
+        finish();
+        startActivity(refresh);
     }
 }

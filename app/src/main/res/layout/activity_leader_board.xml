@@ -59,7 +59,7 @@
         android:background="@drawable/titlebg"
         android:fontFamily="@font/orbitron"
         android:inputType="none"
-        android:text="Top scores"
+        android:text="@string/topScores"
         android:textAlignment="center"
         android:textColor="#DB73FF"
         android:textSize="25sp"
@@ -69,19 +69,19 @@
 
     <Button
         android:id="@+id/playButton"
-        android:layout_width="162dp"
-        android:layout_height="62dp"
-        android:layout_marginStart="132dp"
-        android:layout_marginLeft="132dp"
+        android:layout_width="174dp"
+        android:layout_height="89dp"
+        android:layout_marginStart="116dp"
+        android:layout_marginLeft="116dp"
         android:layout_marginTop="484dp"
         android:fontFamily="@font/orbitron"
-        android:text="Play!"
+        android:onClick="openDifficulty"
+        android:text="@string/play"
         android:textColor="#000000"
         android:textSize="30sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:onClick="openDifficulty"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/username"
@@ -91,7 +91,7 @@
         android:layout_marginLeft="56dp"
         android:layout_marginTop="236dp"
         android:fontFamily="@font/orbitron"
-        android:text="username"
+        android:text="@string/username"
         android:textColor="#ffffff"
         android:inputType="none"
         android:textSize="25sp"

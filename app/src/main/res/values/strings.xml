@@ -1,3 +1,19 @@
 <resources>
-    <string name="app_name">Words</string>
+    <string name="app_name" translatable="false">Words</string>
+    <string name="home">Home</string>
+    <string name="leaderboard">Leaderboard</string>
+    <string name="myAchivements">My Scores</string>
+    <string name="settings">Settings</string>
+    <string name="refreshWords">Refresh words</string>
+    <string name="lgEnglish">English</string>
+    <string name="lgSerbian">Serbian</string>
+    <string name="language">Language</string>
+    <string name="welcome">Welcome</string>
+    <string name="username">username</string>
+    <string name="play">Play!</string>
+    <string name="topScores">Top scores</string>
+    <string name="easy" translatable="false">Easy</string>
+    <string name="medium" translatable="false">Medium</string>
+    <string name="hard" translatable="false">Hard</string>
+    <string name="myhighscore">My highscore:</string>
 </resources>

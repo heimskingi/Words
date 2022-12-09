@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Words</string>
+    <string name="home">Početna</string>
+    <string name="myAchivements">Moji rezultati</string>
+    <string name="settings">Podešavanja</string>
+    <string name="refreshWords">Osveži reči</string>
+    <string name="language">Jezik</string>
+    <string name="lgEnglish">Engleski</string>
+    <string name="lgSerbian">Srpski</string>
+    <string name="leaderboard">Globalni rezultati</string>
+    <string name="welcome">Dobrodošli!</string>
+    <string name="username">korisničko ime</string>
+    <string name="play">Igraj se!</string>
+    <string name="topScores">Najbolji rezultati</string>
+    <string name="myhighscore">Moje najbolje:</string>
+</resources>
