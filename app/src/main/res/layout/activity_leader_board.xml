@@ -78,7 +78,8 @@
         android:textSize="30sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:onClick="openDifficulty"/>
 
     <TextView
         android:id="@+id/username"

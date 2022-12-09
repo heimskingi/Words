@@ -27,7 +27,8 @@
         android:background="@android:color/transparent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/settingsblack" />
+        app:srcCompat="@drawable/settingsblack"
+        android:onClick="openMenu"/>
 
     <TextView
         android:id="@+id/wordSpace"
@@ -62,7 +63,8 @@
         android:textSize="30sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:onClick="openGame"/>
 
     <Button
         android:id="@+id/mediumButton"
@@ -78,7 +80,8 @@
         android:textSize="30sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:onClick="openGame"/>
 
     <Button
         android:id="@+id/hardButton"
@@ -94,6 +97,7 @@
         android:textSize="30sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:onClick="openGame"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

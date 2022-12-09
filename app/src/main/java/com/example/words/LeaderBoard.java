@@ -19,4 +19,9 @@ public class LeaderBoard extends AppCompatActivity {
         Intent i = new Intent(LeaderBoard.this, MainActivity.class);
         startActivity(i);
     }
+
+    public void openDifficulty(View view) {
+        Intent i = new Intent(LeaderBoard.this, Difficulty.class);
+        startActivity(i);
+    }
 }
