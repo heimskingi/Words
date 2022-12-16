@@ -41,11 +41,6 @@ public class Database extends SQLiteOpenHelper {
         onCreate(sqLiteDatabase);
     }
 
-    public void insertWordsFromJson(){
-        SQLiteDatabase db = this.getWritableDatabase();
-        //TODO insert words from json file
-    }
-
     public boolean addUser(User user){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -82,8 +77,8 @@ public class Database extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(WordsTable.COLUMN_SERBIAN_WORD, word.serbianWord);
         values.put(WordsTable.COLUMN_ENGLISH_WORD, word.englishWord);
-        values.put(WordsTable.COLUMN_LEVEL, word.serbianWord);
-        values.put(WordsTable.COLUMN_SERBIAN_WORD, word.serbianWord);
+        values.put(WordsTable.COLUMN_LEVEL, word.level);
+        values.put(WordsTable.COLUMN_WORD_POINTS, word.wordPoints);
 
         long insert = db.insert(WordsTable.TABLE_NAME, null, values);
         return insert != -1;

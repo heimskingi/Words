@@ -12,6 +12,16 @@ public class Word {
         this.level = level;
     }
 
+    @Override
+    public String toString() {
+        return "Word{" +
+                "serbianWord='" + serbianWord + '\'' +
+                ", englishWord='" + englishWord + '\'' +
+                ", wordPoints=" + wordPoints +
+                ", level=" + level +
+                '}';
+    }
+
     public String getSerbianWord() {
         return serbianWord;
     }
