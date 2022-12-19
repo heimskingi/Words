@@ -39,21 +39,25 @@ public class MainActivity extends AppCompatActivity {
     public void exitMenu(View view) {
         Intent i = new Intent(MainActivity.this, LeaderBoard.class);
         startActivity(i);
+        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
     }
 
     public void openDifficulty(View view) {
         Intent i = new Intent(MainActivity.this, Difficulty.class);
         startActivity(i);
+        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
     }
 
     public void openLeaderBoard(View view) {
         Intent i = new Intent(MainActivity.this, LeaderBoard.class);
         startActivity(i);
+        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
     }
 
     public void openAchievements(View view) {
         Intent i = new Intent(MainActivity.this, Achievements.class);
         startActivity(i);
+        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
     }
 
     public void changeToEnglish(View view) {
@@ -66,6 +70,7 @@ public class MainActivity extends AppCompatActivity {
         Intent refresh = new Intent(this, MainActivity.class);
         finish();
         startActivity(refresh);
+        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
     }
 
     public void changeToSerbian(View view) {
@@ -78,5 +83,6 @@ public class MainActivity extends AppCompatActivity {
         Intent refresh = new Intent(this, MainActivity.class);
         finish();
         startActivity(refresh);
+        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
     }
 }

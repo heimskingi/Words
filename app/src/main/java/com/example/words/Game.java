@@ -17,5 +17,6 @@ public class Game extends AppCompatActivity {
     public void openMenu(View view) {
         Intent i = new Intent(Game.this, MainActivity.class);
         startActivity(i);
+        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
     }
 }
