@@ -86,6 +86,19 @@ public class Database extends SQLiteOpenHelper {
         return list;
     }
 
+    @SuppressLint("Range")
+    public int getUserHighscore(String username){
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor c=db.rawQuery("SELECT * FROM " + UserTable.TABLE_NAME
+                + " WHERE " + UserTable.COLUMN_USERNAME + " = '" + username + "'"
+                , null);
+        if(c.moveToFirst()){
+            return c.getInt(c.getColumnIndex(UserTable.COLUMN_HIGHSCORE));
+        }
+        return 10;
+    }
+
     public boolean addUser(User user){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();

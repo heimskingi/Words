@@ -3,7 +3,9 @@ package com.example.words;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -53,8 +55,14 @@ public class Splashscreen extends AppCompatActivity {
             }
         }
 
-        //TODO provera da li je na tom tel-u vec prijavljen korisnik pa da ode na drugu stranicu
-        Intent i = new Intent(Splashscreen.this, UserLogin.class);
+        SharedPreferences sharedPref =  getSharedPreferences("preferences", Context.MODE_PRIVATE);
+        String username = sharedPref.getString("username", "");
+        if(username.equals("")){
+            Intent i = new Intent(Splashscreen.this, UserLogin.class);
+            startActivity(i);
+        }
+
+        Intent i = new Intent(Splashscreen.this, Difficulty.class);
         startActivity(i);
     }
 
