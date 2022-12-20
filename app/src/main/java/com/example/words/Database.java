@@ -97,7 +97,8 @@ public class Database extends SQLiteOpenHelper {
         if(c.moveToFirst()){
             u.setUsername(c.getString(c.getColumnIndex(UserTable.COLUMN_USERNAME)));
             u.setgamesPlayed(c.getInt(c.getColumnIndex(UserTable.COLUMN_GAMES_PLAYED)));
-            u.setshowOnLeaderboard(Boolean.parseBoolean(c.getString(c.getColumnIndex(UserTable.COLUMN_SHOW_ON_LEADERBOARD))));
+            boolean show = c.getInt(c.getColumnIndex(UserTable.COLUMN_SHOW_ON_LEADERBOARD)) > 0;
+            u.setshowOnLeaderboard(show);
             u.setHighscore(c.getInt(c.getColumnIndex(UserTable.COLUMN_HIGHSCORE)));
         }
         return u;

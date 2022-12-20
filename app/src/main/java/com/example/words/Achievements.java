@@ -2,19 +2,16 @@ package com.example.words;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-@SuppressLint("UseSwitchCompatOrMaterialCode")
 public class Achievements extends AppCompatActivity {
 
     TextView myPointsText, myUsernameText, myGamesPlayed;
@@ -40,7 +37,7 @@ public class Achievements extends AppCompatActivity {
         myUsernameText.setText(user.getUsername());
         myPointsText.setText(String.valueOf(user.getHighscore()));
         myGamesPlayed.setText(String.valueOf(user.getgamesPlayed()));
-        switchShowOnLB.setChecked(user.isshowOnLeaderboard()); //not working??
+        switchShowOnLB.setChecked(user.isshowOnLeaderboard());
 
         switchShowOnLB.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {

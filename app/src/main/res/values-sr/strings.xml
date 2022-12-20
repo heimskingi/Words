@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Words</string>
-    <string name="home">Početna</string>
+    <string name="home">Započni igru</string>
     <string name="myAchivements">Moji rezultati</string>
     <string name="settings">Podešavanja</string>
     <string name="refreshWords">Osveži reči</string>
