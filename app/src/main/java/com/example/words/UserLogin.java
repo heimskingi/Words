@@ -35,18 +35,22 @@ public class UserLogin extends AppCompatActivity {
 
     public void insertUser(View view) {
         String username = String.valueOf(usernameEditText.getText());
-        //TODO provera da li ima user sa istim imenom
         Database db = new Database(UserLogin.this);
-        User user = new User(username);
-        boolean success = db.addUser(user);
-        if (!success) {
-            Toast.makeText(UserLogin.this, "Could not make your profile. Please try again!", Toast.LENGTH_LONG).show();
-        } else {
-            SharedPreferences sharedPref = getSharedPreferences("preferences", Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = sharedPref.edit();
-            editor.putString("username", username);
-            editor.apply();
-            Toast.makeText(UserLogin.this, "Successfully created account!", Toast.LENGTH_SHORT).show();
+        if(db.doesUserExists(username)){
+            Toast.makeText(UserLogin.this,"User with same username already exists. Please try something else.", Toast.LENGTH_LONG).show();
+            usernameEditText.setText("");
+        }else {
+            User user = new User(username);
+            boolean success = db.addUser(user);
+            if (!success) {
+                Toast.makeText(UserLogin.this, "Could not make your profile. Please try again!", Toast.LENGTH_LONG).show();
+            } else {
+                SharedPreferences sharedPref = getSharedPreferences("preferences", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPref.edit();
+                editor.putString("username", username);
+                editor.apply();
+                Toast.makeText(UserLogin.this, "Successfully created account!", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 }

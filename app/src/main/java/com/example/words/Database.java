@@ -99,6 +99,19 @@ public class Database extends SQLiteOpenHelper {
         return 0;
     }
 
+    public boolean doesUserExists(String username){
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor c=db.rawQuery("SELECT * FROM " + UserTable.TABLE_NAME
+                        + " WHERE " + UserTable.COLUMN_USERNAME + " = '" + username + "'"
+                , null);
+        if(c.moveToFirst()){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
     public boolean addUser(User user){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
