@@ -14,4 +14,6 @@
     <string name="play">Igraj se!</string>
     <string name="topScores">Najbolji rezultati</string>
     <string name="myhighscore">Moje najbolje:</string>
+    <string name="switchShowOnLB">Prikaži moj rezultat na globalnoj listi</string>
+    <string name="totalgames">Ukupno odigrano:</string>
 </resources>

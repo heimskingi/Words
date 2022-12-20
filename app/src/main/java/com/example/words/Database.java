@@ -87,16 +87,20 @@ public class Database extends SQLiteOpenHelper {
     }
 
     @SuppressLint("Range")
-    public int getUserHighscore(String username){
+    public User getUser(String username){
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor c=db.rawQuery("SELECT * FROM " + UserTable.TABLE_NAME
                 + " WHERE " + UserTable.COLUMN_USERNAME + " = '" + username + "'"
                 , null);
+        User u = new User();
         if(c.moveToFirst()){
-            return c.getInt(c.getColumnIndex(UserTable.COLUMN_HIGHSCORE));
+            u.setUsername(c.getString(c.getColumnIndex(UserTable.COLUMN_USERNAME)));
+            u.setgamesPlayed(c.getInt(c.getColumnIndex(UserTable.COLUMN_GAMES_PLAYED)));
+            u.setshowOnLeaderboard(Boolean.parseBoolean(c.getString(c.getColumnIndex(UserTable.COLUMN_SHOW_ON_LEADERBOARD))));
+            u.setHighscore(c.getInt(c.getColumnIndex(UserTable.COLUMN_HIGHSCORE)));
         }
-        return 0;
+        return u;
     }
 
     public boolean doesUserExists(String username){
@@ -124,7 +128,7 @@ public class Database extends SQLiteOpenHelper {
         return insert != -1;
     }
 
-    public boolean updateUser(User user, int id){
+    public boolean updateUser(User user){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(UserTable.COLUMN_GAMES_PLAYED, user.gamesPlayed);
@@ -132,15 +136,8 @@ public class Database extends SQLiteOpenHelper {
         values.put(UserTable.COLUMN_SHOW_ON_LEADERBOARD, user.showOnLeaderboard);
         values.put(UserTable.COLUMN_USERNAME, user.username);
 
-        long update = db.update(UserTable.TABLE_NAME, values, UserTable._ID + " = ?", new String[]{String.valueOf(id)});
+        long update = db.update(UserTable.TABLE_NAME, values, UserTable.COLUMN_USERNAME + " = ?", new String[]{String.valueOf(user.username)});
         return update != -1;
-    }
-
-    public boolean deleteOneUser(int id){
-        SQLiteDatabase db = this.getWritableDatabase();
-        String query = "DELETE FROM " + UserTable.TABLE_NAME + " WHERE " + UserTable._ID + " = " + id;
-        Cursor cursor = db.rawQuery(query,null);
-        return !cursor.moveToFirst();
     }
 
     public boolean addNewWord(Word word){

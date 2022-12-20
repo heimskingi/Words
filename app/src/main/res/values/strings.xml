@@ -17,4 +17,6 @@
     <string name="hard" translatable="false">Hard</string>
     <string name="myhighscore">My highscore:</string>
     <string name="Worderland" translatable="false">Worderland</string>
+    <string name="switchShowOnLB">Show my result on global leaderboard</string>
+    <string name="totalgames">Total games played:</string>
 </resources>
