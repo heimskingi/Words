@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,6 +22,10 @@ public class Achievements extends AppCompatActivity {
         myUsernameText = findViewById(R.id.myusername);
 
         SharedPreferences sharedPref =  getSharedPreferences("preferences",Context.MODE_PRIVATE);
+        if(!sharedPref.contains("username")){
+            Intent i = new Intent(Achievements.this, UserLogin.class);
+            startActivity(i);
+        }
         String username = sharedPref.getString("username", "");
         myUsernameText.setText(username);
 
