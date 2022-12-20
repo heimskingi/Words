@@ -32,25 +32,30 @@ public class Splashscreen extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splashscreen);
-
-        wordsData = getJsonDataFromResource(R.raw.words);
-        usersData = getJsonDataFromResource(R.raw.users);
-        boolean wordsDone = populateDatabaseWithWords(wordsData);
-        boolean usersDone = populateDatabaseWithUsers(usersData);
-        if(wordsDone && usersDone){
-            try {
-                Thread.sleep(3000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+        Database db = new Database(Splashscreen.this);
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        if(db.tableEmpty(Constants.WordsTable.TABLE_NAME)){
+            wordsData = getJsonDataFromResource(R.raw.words);
+            boolean wordsDone = populateDatabaseWithWords(wordsData);
+            if(!wordsDone){
+                Toast.makeText(Splashscreen.this,"Unable to load resources.", Toast.LENGTH_SHORT).show();
             }
-            //TODO provera da li je na tom tel-u vec prijavljen korisnik pa da ode na drugu stranicu
-            Intent i = new Intent(Splashscreen.this, UserLogin.class);
-            startActivity(i);
         }
-        else{
-            text = findViewById(R.id.splashText);
-            text.setText("Unable to load resorces.");
+        if(db.tableEmpty(Constants.UserTable.TABLE_NAME)) {
+            usersData = getJsonDataFromResource(R.raw.users);
+            boolean usersDone = populateDatabaseWithUsers(usersData);
+            if(!usersDone){
+                Toast.makeText(Splashscreen.this,"Unable to load resources.", Toast.LENGTH_SHORT).show();
+            }
         }
+
+        //TODO provera da li je na tom tel-u vec prijavljen korisnik pa da ode na drugu stranicu
+        Intent i = new Intent(Splashscreen.this, UserLogin.class);
+        startActivity(i);
     }
 
     private boolean populateDatabaseWithWords(String jsonData){

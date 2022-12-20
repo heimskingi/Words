@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
@@ -11,6 +12,8 @@ import android.util.Log;
 import com.example.words.Constants.*;
 
 import java.util.ArrayList;
+
+import kotlin.reflect.KFunction;
 
 public class Database extends SQLiteOpenHelper {
 
@@ -42,7 +45,20 @@ public class Database extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS "+UserTable.TABLE_NAME);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS "+WordsTable.TABLE_NAME);
         onCreate(sqLiteDatabase);
+    }
+
+    public boolean tableEmpty(String table){
+        SQLiteDatabase database = this.getReadableDatabase();
+        long NoOfRows = DatabaseUtils.queryNumEntries(database,table);
+
+        if (NoOfRows == 0){
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @SuppressLint("Range")
