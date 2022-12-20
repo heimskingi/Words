@@ -6,8 +6,11 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,6 +28,7 @@ import java.io.Reader;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
+import java.util.Locale;
 
 @SuppressLint("CustomSplashScreen")
 public class Splashscreen extends AppCompatActivity {
@@ -58,11 +62,20 @@ public class Splashscreen extends AppCompatActivity {
             }
         }
 
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        SharedPreferences sharedPref = getSharedPreferences("preferences", Context.MODE_PRIVATE);
+
+        if(sharedPref.contains("language")){
+            Locale myLocale = new Locale(sharedPref.getString("language", ""));
+            Resources res = getResources();
+            DisplayMetrics dm = res.getDisplayMetrics();
+            Configuration conf = res.getConfiguration();
+            conf.locale = myLocale;
+            res.updateConfiguration(conf, dm);
+        }
+
         if(!sharedPref.contains("username")){
             Intent i = new Intent(Splashscreen.this, UserLogin.class);
             startActivity(i);
-            //TODO dodati da ne moze da ide na druge strane dok nema ime
         }else {
             Intent i = new Intent(Splashscreen.this, Difficulty.class);
             startActivity(i);

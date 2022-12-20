@@ -2,7 +2,9 @@ package com.example.words;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -67,6 +69,10 @@ public class MainActivity extends AppCompatActivity {
         Configuration conf = res.getConfiguration();
         conf.locale = myLocale;
         res.updateConfiguration(conf, dm);
+        SharedPreferences sharedPref = getSharedPreferences("preferences", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString("language", "en");
+        editor.apply();
         Intent refresh = new Intent(this, MainActivity.class);
         finish();
         startActivity(refresh);
@@ -80,6 +86,10 @@ public class MainActivity extends AppCompatActivity {
         Configuration conf = res.getConfiguration();
         conf.locale = myLocale;
         res.updateConfiguration(conf, dm);
+        SharedPreferences sharedPref = getSharedPreferences("preferences", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString("language", "sr");
+        editor.apply();
         Intent refresh = new Intent(this, MainActivity.class);
         finish();
         startActivity(refresh);

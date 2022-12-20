@@ -46,6 +46,7 @@ public class UserLogin extends AppCompatActivity {
             SharedPreferences.Editor editor = sharedPref.edit();
             editor.putString("username", username);
             editor.apply();
+            Toast.makeText(UserLogin.this, "Successfully created account!", Toast.LENGTH_SHORT).show();
         }
     }
 }
