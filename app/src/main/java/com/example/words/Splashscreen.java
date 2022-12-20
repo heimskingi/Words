@@ -24,7 +24,8 @@ import java.io.Writer;
 @SuppressLint("CustomSplashScreen")
 public class Splashscreen extends AppCompatActivity {
 
-    String data = "";
+    String wordsData = "";
+    String usersData = "";
     TextView text;
 
     @Override
@@ -32,9 +33,11 @@ public class Splashscreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splashscreen);
 
-        data = getJsonDataFromResource();
-        boolean done = populateDatabaseWithWords(data);
-        if(done){
+        wordsData = getJsonDataFromResource(R.raw.words);
+        usersData = getJsonDataFromResource(R.raw.users);
+        boolean wordsDone = populateDatabaseWithWords(wordsData);
+        boolean usersDone = populateDatabaseWithUsers(usersData);
+        if(wordsDone && usersDone){
             try {
                 Thread.sleep(3000);
             } catch (InterruptedException e) {
@@ -68,7 +71,7 @@ public class Splashscreen extends AppCompatActivity {
                 Word w = new Word(sr,eng,points,level);
                 boolean suc = db.addNewWord(w);
                 if(!suc){
-                    Toast.makeText(Splashscreen.this, "Failed to insert data in db.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Splashscreen.this, "Failed to insert word data in db.", Toast.LENGTH_SHORT).show();
                     return false;
                 }
             }
@@ -78,8 +81,37 @@ public class Splashscreen extends AppCompatActivity {
         return true;
     }
 
-    private String getJsonDataFromResource(){
-        InputStream is = getResources().openRawResource(R.raw.words);
+    private boolean populateDatabaseWithUsers(String jsonData){
+        Database db = new Database(Splashscreen.this);
+
+        try{
+            JSONArray jsonArray=new JSONArray(jsonData);
+            int arrLength = jsonArray.length();
+            if(arrLength == 0){
+                return false;
+            }
+            for(int i =0 ; i<arrLength; i++) {
+                JSONObject one = jsonArray.getJSONObject(i);
+                String username = one.getString("username");
+                int gamesPlayed = one.getInt("gamesPlayed");
+                int highsocre = one.getInt("highscore");
+                boolean showonLB = one.getBoolean("showOnLeaderboard");
+                User u = new User(username,gamesPlayed,highsocre,showonLB);
+                boolean suc = db.addUser(u);
+                if(!suc){
+                    Toast.makeText(Splashscreen.this, "Failed to insert user data in db.", Toast.LENGTH_SHORT).show();
+                    return false;
+                }
+            }
+        }catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return true;
+    }
+
+
+    private String getJsonDataFromResource(int resource){
+        InputStream is = getResources().openRawResource(resource);
         Writer writer = new StringWriter();
         int size = 0;
         try {

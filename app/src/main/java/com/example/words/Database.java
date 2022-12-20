@@ -1,12 +1,16 @@
 package com.example.words;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import com.example.words.Constants.*;
+
+import java.util.ArrayList;
 
 public class Database extends SQLiteOpenHelper {
 
@@ -41,13 +45,38 @@ public class Database extends SQLiteOpenHelper {
         onCreate(sqLiteDatabase);
     }
 
+    @SuppressLint("Range")
+    public ArrayList<User> getTop5(){
+        ArrayList<User> list =new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor c=db.rawQuery("SELECT * FROM " + UserTable.TABLE_NAME
+                 + " WHERE " + UserTable.COLUMN_SHOW_ON_LEADERBOARD + " = true "
+                + " ORDER BY " + UserTable.COLUMN_HIGHSCORE + " DESC LIMIT 5"
+                ,null);
+
+        if(c.moveToFirst()) {
+            do {
+                User u = new User();
+                u.setUsername(c.getString(c.getColumnIndex(UserTable.COLUMN_USERNAME)));
+                u.setgamesPlayed(c.getInt(c.getColumnIndex(UserTable.COLUMN_GAMES_PLAYED)));
+                u.setshowOnLeaderboard(Boolean.parseBoolean(c.getString(c.getColumnIndex(UserTable.COLUMN_SHOW_ON_LEADERBOARD))));
+                u.setHighscore(c.getInt(c.getColumnIndex(UserTable.COLUMN_HIGHSCORE)));
+                list.add(u);
+            } while (c.moveToNext());
+        }
+        c.close();
+
+        return list;
+    }
+
     public boolean addUser(User user){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(UserTable.COLUMN_USERNAME, user.username);
-        values.put(UserTable.COLUMN_GAMES_PLAYED, 0);
-        values.put(UserTable.COLUMN_HIGHSCORE, 0);
-        values.put(UserTable.COLUMN_SHOW_ON_LEADERBOARD, false);
+        values.put(UserTable.COLUMN_GAMES_PLAYED, user.gamesPlayed);
+        values.put(UserTable.COLUMN_HIGHSCORE, user.highscore);
+        values.put(UserTable.COLUMN_SHOW_ON_LEADERBOARD, user.showOnLeaderboard);
 
         long insert = db.insert(UserTable.TABLE_NAME, null, values);
         return insert != -1;

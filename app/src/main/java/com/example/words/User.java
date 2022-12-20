@@ -3,11 +3,16 @@ package com.example.words;
 public class User {
 
     public String username;
-    public int gamesPlayed = 0, highscore = 0;
-    public boolean showOnLeaderboard = false;
+    public int gamesPlayed, highscore;
+    public boolean showOnLeaderboard ;
+
+    public User(){}
 
     public User(String username) {
         this.username = username;
+        this.gamesPlayed = 0;
+        this.highscore = 0;
+        showOnLeaderboard = false;
     }
 
     public User(String username, int gamesPlayed, int highscore, boolean showOnLeaderboard) {
