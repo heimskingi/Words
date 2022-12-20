@@ -96,7 +96,7 @@ public class Database extends SQLiteOpenHelper {
         if(c.moveToFirst()){
             return c.getInt(c.getColumnIndex(UserTable.COLUMN_HIGHSCORE));
         }
-        return 10;
+        return 0;
     }
 
     public boolean addUser(User user){

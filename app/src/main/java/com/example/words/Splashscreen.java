@@ -7,6 +7,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -15,6 +17,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -55,15 +58,15 @@ public class Splashscreen extends AppCompatActivity {
             }
         }
 
-        SharedPreferences sharedPref =  getSharedPreferences("preferences", Context.MODE_PRIVATE);
-        String username = sharedPref.getString("username", "");
-        if(username.equals("")){
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        if(!sharedPref.contains("username")){
             Intent i = new Intent(Splashscreen.this, UserLogin.class);
             startActivity(i);
+            //TODO dodati da ne moze da ide na druge strane dok nema ime
+        }else {
+            Intent i = new Intent(Splashscreen.this, Difficulty.class);
+            startActivity(i);
         }
-
-        Intent i = new Intent(Splashscreen.this, Difficulty.class);
-        startActivity(i);
     }
 
     private boolean populateDatabaseWithWords(String jsonData){

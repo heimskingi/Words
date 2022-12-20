@@ -35,9 +35,9 @@ public class UserLogin extends AppCompatActivity {
 
     public void insertUser(View view) {
         String username = String.valueOf(usernameEditText.getText());
+        //TODO provera da li ima user sa istim imenom
         Database db = new Database(UserLogin.this);
         User user = new User(username);
-        Toast.makeText(UserLogin.this, user.toString(), Toast.LENGTH_LONG).show();
         boolean success = db.addUser(user);
         if (!success) {
             Toast.makeText(UserLogin.this, "Could not make your profile. Please try again!", Toast.LENGTH_LONG).show();
