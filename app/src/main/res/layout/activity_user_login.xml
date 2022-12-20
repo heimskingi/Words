@@ -32,15 +32,12 @@
 
     <TextView
         android:id="@+id/wordSpace"
-        android:layout_width="237dp"
+        android:layout_width="200dp"
         android:layout_height="36dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginLeft="20dp"
         android:layout_marginTop="20dp"
-        android:background="@color/white"
         android:fontFamily="@font/orbitron"
         android:gravity="center_horizontal"
-        android:text="Word space"
+        android:text="@string/Worderland"
         android:textAlignment="center"
         android:textColor="#DB73FF"
         android:inputType="none"
@@ -99,7 +96,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/editTextTextPersonName"
+        android:id="@+id/editTextUsername"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/border"

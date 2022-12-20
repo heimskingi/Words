@@ -16,4 +16,5 @@
     <string name="medium" translatable="false">Medium</string>
     <string name="hard" translatable="false">Hard</string>
     <string name="myhighscore">My highscore:</string>
+    <string name="Worderland" translatable="false">Worderland</string>
 </resources>
