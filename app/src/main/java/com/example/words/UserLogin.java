@@ -17,10 +17,12 @@ public class UserLogin extends AppCompatActivity {
     public void openDifficulty(View view) {
         Intent i = new Intent(UserLogin.this, Difficulty.class);
         startActivity(i);
+        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
     }
 
     public void openMenu(View view) {
         Intent i = new Intent(UserLogin.this, MainActivity.class);
         startActivity(i);
+        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
     }
 }

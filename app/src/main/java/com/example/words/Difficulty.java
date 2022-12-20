@@ -17,10 +17,12 @@ public class Difficulty extends AppCompatActivity {
     public void openGame(View view) {
         Intent i = new Intent(Difficulty.this, Game.class);
         startActivity(i);
+        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
     }
 
     public void openMenu(View view) {
         Intent i = new Intent(Difficulty.this, MainActivity.class);
         startActivity(i);
+        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
     }
 }
