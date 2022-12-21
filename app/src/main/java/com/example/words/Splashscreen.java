@@ -123,9 +123,10 @@ public class Splashscreen extends AppCompatActivity {
                 JSONObject one = jsonArray.getJSONObject(i);
                 String username = one.getString("username");
                 int gamesPlayed = one.getInt("gamesPlayed");
-                int highsocre = one.getInt("highscore");
                 boolean showonLB = one.getBoolean("showOnLeaderboard");
-                User u = new User(username,gamesPlayed,highsocre,showonLB);
+                String minTime = one.getString("minTime");
+                int maxWords = one.getInt("maxWords");
+                User u = new User(username,gamesPlayed,showonLB,minTime, maxWords);
                 boolean suc = db.addUser(u);
                 if(!suc){
                     Toast.makeText(Splashscreen.this, "Failed to insert user data in db.", Toast.LENGTH_SHORT).show();

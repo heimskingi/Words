@@ -16,4 +16,6 @@
     <string name="myhighscore">Moje najbolje:</string>
     <string name="switchShowOnLB">Prikaži moj rezultat na globalnoj listi</string>
     <string name="totalgames">Ukupno odigrano:</string>
+    <string name="maxwords">Najviše reči:</string>
+    <string name="mintime">Najkraće vreme:</string>
 </resources>

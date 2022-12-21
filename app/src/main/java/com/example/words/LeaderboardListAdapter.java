@@ -24,9 +24,11 @@ public class LeaderboardListAdapter  extends ArrayAdapter<User> {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.leaderboard_list_item, parent,false);
         }
         TextView username = convertView.findViewById(R.id.usernameLeaderboard);
-        TextView points = convertView.findViewById(R.id.pointsLeaderboard);
+        TextView words = convertView.findViewById(R.id.wordsLeaderboard);
+        TextView time = convertView.findViewById(R.id.timeLeaderboard);
         username.setText(u.getUsername());
-        points.setText(String.valueOf(u.getHighscore()));
+        words.setText(String.valueOf(u.getMaxWords()));
+        time.setText(u.getMinTime());
 
         return convertView;
     }

@@ -19,4 +19,6 @@
     <string name="Worderland" translatable="false">Worderland</string>
     <string name="switchShowOnLB">Show my result on global leaderboard</string>
     <string name="totalgames">Total games played:</string>
+    <string name="maxwords">Max words in game:</string>
+    <string name="mintime">Min time in game:</string>
 </resources>

@@ -30,7 +30,8 @@ public class Database extends SQLiteOpenHelper {
                     UserTable._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     UserTable.COLUMN_USERNAME + " TEXT NOT NULL," +
                     UserTable.COLUMN_GAMES_PLAYED + " INTEGER NOT NULL, " +
-                    UserTable.COLUMN_HIGHSCORE + " INTEGER NOT NULL, " +
+                    UserTable.COLUMN_MAX_WORDS + " INTEGER NOT NULL, " +
+                    UserTable.COLUMN_MIN_TIME + " TEXT NOT NULL, " +
                     UserTable.COLUMN_SHOW_ON_LEADERBOARD + " BOOL NOT NULL);" ;
         sqLiteDatabase.execSQL(CREATE_USERS_TABLE);
 
@@ -68,7 +69,7 @@ public class Database extends SQLiteOpenHelper {
 
         Cursor c=db.rawQuery("SELECT * FROM " + UserTable.TABLE_NAME
                  + " WHERE " + UserTable.COLUMN_SHOW_ON_LEADERBOARD + " = true "
-                + " ORDER BY " + UserTable.COLUMN_HIGHSCORE + " DESC LIMIT 5"
+                + " ORDER BY " + UserTable.COLUMN_MAX_WORDS + " DESC LIMIT 5"
                 ,null);
 
         if(c.moveToFirst()) {
@@ -77,7 +78,8 @@ public class Database extends SQLiteOpenHelper {
                 u.setUsername(c.getString(c.getColumnIndex(UserTable.COLUMN_USERNAME)));
                 u.setgamesPlayed(c.getInt(c.getColumnIndex(UserTable.COLUMN_GAMES_PLAYED)));
                 u.setshowOnLeaderboard(Boolean.parseBoolean(c.getString(c.getColumnIndex(UserTable.COLUMN_SHOW_ON_LEADERBOARD))));
-                u.setHighscore(c.getInt(c.getColumnIndex(UserTable.COLUMN_HIGHSCORE)));
+                u.setMaxWords(c.getInt(c.getColumnIndex(UserTable.COLUMN_MAX_WORDS)));
+                u.setMinTime(c.getString(c.getColumnIndex(UserTable.COLUMN_MIN_TIME)));
                 list.add(u);
             } while (c.moveToNext());
         }
@@ -99,7 +101,8 @@ public class Database extends SQLiteOpenHelper {
             u.setgamesPlayed(c.getInt(c.getColumnIndex(UserTable.COLUMN_GAMES_PLAYED)));
             boolean show = c.getInt(c.getColumnIndex(UserTable.COLUMN_SHOW_ON_LEADERBOARD)) > 0;
             u.setshowOnLeaderboard(show);
-            u.setHighscore(c.getInt(c.getColumnIndex(UserTable.COLUMN_HIGHSCORE)));
+            u.setMaxWords(c.getInt(c.getColumnIndex(UserTable.COLUMN_MAX_WORDS)));
+            u.setMinTime(c.getString(c.getColumnIndex(UserTable.COLUMN_MIN_TIME)));
         }
         return u;
     }
@@ -122,8 +125,9 @@ public class Database extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(UserTable.COLUMN_USERNAME, user.username);
         values.put(UserTable.COLUMN_GAMES_PLAYED, user.gamesPlayed);
-        values.put(UserTable.COLUMN_HIGHSCORE, user.highscore);
         values.put(UserTable.COLUMN_SHOW_ON_LEADERBOARD, user.showOnLeaderboard);
+        values.put(UserTable.COLUMN_MAX_WORDS, user.maxWords);
+        values.put(UserTable.COLUMN_MIN_TIME, user.minTime);
 
         long insert = db.insert(UserTable.TABLE_NAME, null, values);
         return insert != -1;
@@ -133,9 +137,10 @@ public class Database extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(UserTable.COLUMN_GAMES_PLAYED, user.gamesPlayed);
-        values.put(UserTable.COLUMN_HIGHSCORE, user.highscore);
         values.put(UserTable.COLUMN_SHOW_ON_LEADERBOARD, user.showOnLeaderboard);
         values.put(UserTable.COLUMN_USERNAME, user.username);
+        values.put(UserTable.COLUMN_MAX_WORDS, user.maxWords);
+        values.put(UserTable.COLUMN_MIN_TIME, user.minTime);
 
         long update = db.update(UserTable.TABLE_NAME, values, UserTable.COLUMN_USERNAME + " = ?", new String[]{String.valueOf(user.username)});
         return update != -1;

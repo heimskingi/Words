@@ -14,16 +14,18 @@ import android.widget.Toast;
 
 public class Achievements extends AppCompatActivity {
 
-    TextView myPointsText, myUsernameText, myGamesPlayed;
+    TextView myUsernameText, myGamesPlayed, myMinTime, myMaxWords;
     Switch switchShowOnLB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_achievements);
-        myPointsText = findViewById(R.id.myPoints);
+
         myUsernameText = findViewById(R.id.myusername);
         myGamesPlayed = findViewById(R.id.myGamesPlayed);
+        myMinTime = findViewById(R.id.myMinTime);
+        myMaxWords = findViewById(R.id.myMaxWords);
         switchShowOnLB = findViewById(R.id.switchLB);
 
         SharedPreferences sharedPref =  getSharedPreferences("preferences",Context.MODE_PRIVATE);
@@ -35,8 +37,9 @@ public class Achievements extends AppCompatActivity {
         Database db = new Database(Achievements.this);
         User user = db.getUser(username);
         myUsernameText.setText(user.getUsername());
-        myPointsText.setText(String.valueOf(user.getHighscore()));
         myGamesPlayed.setText(String.valueOf(user.getgamesPlayed()));
+        myMinTime.setText(user.getMinTime());
+        myMaxWords.setText(String.valueOf(user.getMaxWords()));
         switchShowOnLB.setChecked(user.isshowOnLeaderboard());
 
         switchShowOnLB.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
