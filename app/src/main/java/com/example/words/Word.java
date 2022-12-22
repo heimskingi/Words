@@ -5,6 +5,8 @@ public class Word {
     public String serbianWord, englishWord;
     public int wordPoints, level;
 
+    public Word(){}
+
     public Word(String serbianWord, String englishWord, int wordPoints, int level) {
         this.serbianWord = serbianWord;
         this.englishWord = englishWord;
