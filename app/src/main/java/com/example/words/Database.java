@@ -165,4 +165,28 @@ public class Database extends SQLiteOpenHelper {
         return !cursor.moveToFirst();
     }
 
+    @SuppressLint("Range")
+    public ArrayList<Word> getWordsByLevel(int level){
+        ArrayList<Word> list =new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor c=db.rawQuery("SELECT * FROM " + WordsTable.TABLE_NAME
+                        + " WHERE " + WordsTable.COLUMN_LEVEL + " = " + level
+                ,null);
+
+        if(c.moveToFirst()) {
+            do {
+               Word w = new Word();
+               w.setLevel(c.getInt(c.getColumnIndex(WordsTable.COLUMN_LEVEL)));
+               w.setEnglishWord(c.getString(c.getColumnIndex(WordsTable.COLUMN_ENGLISH_WORD)));
+               w.setSerbianWord(c.getString(c.getColumnIndex(WordsTable.COLUMN_SERBIAN_WORD)));
+               w.setWordPoints(c.getInt(c.getColumnIndex(WordsTable.COLUMN_WORD_POINTS)));
+               list.add(w);
+            } while (c.moveToNext());
+        }
+        c.close();
+
+        return list;
+    }
+
 }

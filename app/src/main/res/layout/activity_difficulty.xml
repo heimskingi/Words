@@ -49,8 +49,6 @@
         android:id="@+id/easyButton"
         android:layout_width="185dp"
         android:layout_height="67dp"
-        android:layout_marginStart="112dp"
-        android:layout_marginLeft="112dp"
         android:layout_marginTop="168dp"
         android:fontFamily="@font/orbitron"
         android:onClick="openGame"
@@ -59,6 +57,7 @@
         android:textColor="#000000"
         android:textSize="30sp"
         android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -66,8 +65,6 @@
         android:id="@+id/mediumButton"
         android:layout_width="190dp"
         android:layout_height="68dp"
-        android:layout_marginStart="112dp"
-        android:layout_marginLeft="112dp"
         android:layout_marginTop="124dp"
         android:fontFamily="@font/orbitron"
         android:onClick="openGame"
@@ -76,6 +73,7 @@
         android:textColor="#000000"
         android:textSize="30sp"
         android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/easyButton" />
 
@@ -83,8 +81,6 @@
         android:id="@+id/hardButton"
         android:layout_width="190dp"
         android:layout_height="68dp"
-        android:layout_marginStart="112dp"
-        android:layout_marginLeft="112dp"
         android:layout_marginTop="124dp"
         android:fontFamily="@font/orbitron"
         android:onClick="openGame"
@@ -93,6 +89,7 @@
         android:textColor="#000000"
         android:textSize="30sp"
         android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/mediumButton" />
 
