@@ -35,15 +35,23 @@ public class Splashscreen extends AppCompatActivity {
 
     String wordsData = "";
     String usersData = "";
-    TextView text;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splashscreen);
+        boolean internetExists = InternetCheck.isInternetAvailable(Splashscreen.this);
+        if(internetExists){
+            Toast.makeText(Splashscreen.this, "connected to internet", Toast.LENGTH_SHORT).show();
+            //update local db with api data
+        }else{
+            Toast.makeText(Splashscreen.this, "no internet", Toast.LENGTH_SHORT).show();
+            //load local json
+        }
+
         Database db = new Database(Splashscreen.this);
         try {
-            Thread.sleep(3000);
+            Thread.sleep(5000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -123,10 +131,11 @@ public class Splashscreen extends AppCompatActivity {
                 JSONObject one = jsonArray.getJSONObject(i);
                 String username = one.getString("username");
                 int gamesPlayed = one.getInt("gamesPlayed");
+                int highscore = one.getInt("highscore");
                 boolean showonLB = one.getBoolean("showOnLeaderboard");
                 String minTime = one.getString("minTime");
                 int maxWords = one.getInt("maxWords");
-                User u = new User(username,gamesPlayed,showonLB,minTime, maxWords);
+                User u = new User(username,gamesPlayed,highscore, showonLB,minTime, maxWords);
                 boolean suc = db.addUser(u);
                 if(!suc){
                     Toast.makeText(Splashscreen.this, "Failed to insert user data in db.", Toast.LENGTH_SHORT).show();
