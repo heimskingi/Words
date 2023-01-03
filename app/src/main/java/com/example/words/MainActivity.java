@@ -95,10 +95,4 @@ public class MainActivity extends AppCompatActivity {
         startActivity(refresh);
         overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
     }
-
-    public void openAdmin(View view) {
-        Intent i = new Intent(MainActivity.this, AdminDashboard.class);
-        startActivity(i);
-        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-    }
 }
