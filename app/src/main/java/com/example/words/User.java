@@ -3,7 +3,7 @@ package com.example.words;
 public class User {
 
     public String username, minTime;
-    public int gamesPlayed, maxWords;
+    public int gamesPlayed, maxWords, highscore;
     public boolean showOnLeaderboard ;
 
     public User(){}
@@ -11,14 +11,16 @@ public class User {
     public User(String username) {
         this.username = username;
         this.gamesPlayed = 0;
+        this.highscore = 0;
         this.showOnLeaderboard = false;
         this.minTime = "00:00";
         this.maxWords = 0;
     }
 
-    public User(String username, int gamesPlayed, boolean showOnLeaderboard, String minTime, int maxWords) {
+    public User(String username, int gamesPlayed, int highscore, boolean showOnLeaderboard, String minTime, int maxWords) {
         this.username = username;
         this.gamesPlayed = gamesPlayed;
+        this.highscore = highscore;
         this.showOnLeaderboard = showOnLeaderboard;
         this.maxWords = maxWords;
         this.minTime = minTime;
@@ -38,6 +40,14 @@ public class User {
 
     public void setMaxWords(int maxWords) {
         this.maxWords = maxWords;
+    }
+
+    public int getHighscore() {
+        return highscore;
+    }
+
+    public void setHighscore(int highscore) {
+        this.highscore = highscore;
     }
 
     public boolean isshowOnLeaderboard() {
