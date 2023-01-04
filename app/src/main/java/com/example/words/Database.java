@@ -20,28 +20,29 @@ public class Database extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "game.db";
     public static final int DATABASE_VERSION = 1;
 
+    final String CREATE_USERS_TABLE = "CREATE TABLE " + UserTable.TABLE_NAME + " (" +
+            UserTable._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            UserTable.COLUMN_USERNAME + " TEXT NOT NULL," +
+            UserTable.COLUMN_GAMES_PLAYED + " INTEGER NOT NULL, " +
+            UserTable.COLUMN_HIGHSCORE + " INTEGER NOT NULL, " +
+            UserTable.COLUMN_MAX_WORDS + " INTEGER NOT NULL, " +
+            UserTable.COLUMN_MIN_TIME + " TEXT NOT NULL, " +
+            UserTable.COLUMN_SHOW_ON_LEADERBOARD + " BOOL NOT NULL);" ;
+
+    final String CREATE_WORDS_TABLE = "CREATE TABLE " + WordsTable.TABLE_NAME + " (" +
+            WordsTable._ID + " INTEGER PRIMARY KEY AUTOINCREMENT , " +
+            WordsTable.COLUMN_SERBIAN_WORD + " TEXT NOT NULL, " +
+            WordsTable.COLUMN_ENGLISH_WORD + " TEXT NOT NULL, " +
+            WordsTable.COLUMN_WORD_POINTS + " INTEGER NOT NULL, " +
+            WordsTable.COLUMN_LEVEL + " INTEGER NOT NULL);";
+
     public Database(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        final String CREATE_USERS_TABLE = "CREATE TABLE " + UserTable.TABLE_NAME + " (" +
-                    UserTable._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                    UserTable.COLUMN_USERNAME + " TEXT NOT NULL," +
-                    UserTable.COLUMN_GAMES_PLAYED + " INTEGER NOT NULL, " +
-                    UserTable.COLUMN_HIGHSCORE + " INTEGER NOT NULL, " +
-                    UserTable.COLUMN_MAX_WORDS + " INTEGER NOT NULL, " +
-                    UserTable.COLUMN_MIN_TIME + " TEXT NOT NULL, " +
-                    UserTable.COLUMN_SHOW_ON_LEADERBOARD + " BOOL NOT NULL);" ;
         sqLiteDatabase.execSQL(CREATE_USERS_TABLE);
-
-        final String CREATE_WORDS_TABLE = "CREATE TABLE " + WordsTable.TABLE_NAME + " (" +
-                    WordsTable._ID + " INTEGER PRIMARY KEY AUTOINCREMENT , " +
-                    WordsTable.COLUMN_SERBIAN_WORD + " TEXT NOT NULL, " +
-                    WordsTable.COLUMN_ENGLISH_WORD + " TEXT NOT NULL, " +
-                    WordsTable.COLUMN_WORD_POINTS + " INTEGER NOT NULL, " +
-                    WordsTable.COLUMN_LEVEL + " INTEGER NOT NULL);";
         sqLiteDatabase.execSQL(CREATE_WORDS_TABLE);
     }
 
@@ -60,6 +61,20 @@ public class Database extends SQLiteOpenHelper {
             return true;
         } else {
             return false;
+        }
+    }
+    public int tableCapacity(String table){
+        SQLiteDatabase database = this.getReadableDatabase();
+        return (int) DatabaseUtils.queryNumEntries(database,table);
+    }
+    public void dropPreviousData(String table){
+        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + table);
+        if(table.equals("Words")){
+            sqLiteDatabase.execSQL(CREATE_WORDS_TABLE);
+        }
+        if(table.equals("Users")){
+            sqLiteDatabase.execSQL(CREATE_USERS_TABLE);
         }
     }
 

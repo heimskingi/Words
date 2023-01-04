@@ -2,24 +2,54 @@ package com.example.words;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 
 public class LeaderBoard extends AppCompatActivity {
 
     ListView listView;
+    String usersData = "", data = "", eTag = "";
+    boolean newUsers = false, emptyUsers = false;
+    URL url;
+    InputStream inputStream;
+    HttpURLConnection connection;
+    SharedPreferences sharedPref;
+    PopulateDB populateDB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_leader_board);
         listView = findViewById(R.id.leaderboardListView);
-        PopulateListView();
+
+        populateDB = new PopulateDB(LeaderBoard.this);
+
+        boolean internetExists = InternetCheck.isInternetAvailable(LeaderBoard.this);
+        if (internetExists) {
+            DownloadUsers task2 = new DownloadUsers();
+            task2.execute(Constants.ApiKeys.usersApiUrl);
+        }else{
+            PopulateListView();
+        }
     }
 
     public void PopulateListView(){
@@ -40,4 +70,99 @@ public class LeaderBoard extends AppCompatActivity {
         startActivity(i);
         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
     }
+
+    private class DownloadUsers extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected String doInBackground(String... strings) {
+            sharedPref = getSharedPreferences("preferences", Context.MODE_PRIVATE);
+            data = "";
+            Database db = new Database(LeaderBoard.this);
+            if(db.tableCapacity(Constants.UserTable.TABLE_NAME) == 1){
+                emptyUsers = true;
+            }
+            try {
+                url = new URL(strings[0]);
+                connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestMethod("GET");
+                connection.setRequestProperty("X-Master-Key", Constants.ApiKeys.X_MASTER_KEY);
+                connection.setRequestProperty("X-Access-Key", Constants.ApiKeys.X_ACCESS_KEY);
+                connection.connect();
+                if (connection.getResponseCode() != HttpURLConnection.HTTP_OK)
+                    return "Server response:" + connection.getResponseMessage();
+
+                eTag = connection.getHeaderField("ETag");
+                if (!sharedPref.contains("eTagUsers")) {
+                    SharedPreferences.Editor editor = sharedPref.edit();
+                    editor.putString("eTagUsers", eTag);
+                    editor.apply();
+                }
+
+                inputStream = connection.getInputStream();
+                if (inputStream == null) {
+                    return null;
+                }
+                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+                String oneLine;
+                while ((oneLine = reader.readLine()) != null) {
+                    data += oneLine;
+                }
+                if (data.length() == 0) {
+                    return null;
+                } else {
+                    try {
+                        JSONObject jsonObject = new JSONObject(data);
+                        JSONArray jsonArray = jsonObject.optJSONArray("record");
+                        if (jsonArray != null) {
+                           usersData = jsonArray.toString();
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    if (inputStream != null) {
+                        inputStream.close();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                if (connection != null) {
+                    connection.disconnect();
+                }
+
+                if (!eTag.equals(sharedPref.getString("eTagUsers", null))) {
+                    SharedPreferences.Editor editor = sharedPref.edit();
+                    editor.putString("eTagUsers" , eTag);
+                    editor.apply();
+                    newUsers = true;
+                    db.dropPreviousData(Constants.UserTable.TABLE_NAME);
+                }
+            }
+            return usersData;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            if (s == null) {
+                Toast.makeText(LeaderBoard.this, "No data", Toast.LENGTH_SHORT).show();
+            }else{
+                if(newUsers || emptyUsers){
+                    populateDB.populateDatabaseWithUsers(usersData);
+                    newUsers = false;
+                    emptyUsers = false;
+                }
+            }
+            PopulateListView();
+        }
+
+    }
+
 }
