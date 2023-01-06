@@ -26,6 +26,17 @@ public class User {
         this.minTime = minTime;
     }
 
+    public String toJSON(){
+        return "{" +
+                "\"username\": \"" + this.getUsername() + "\", " +
+                "\"gamesPlayed\": " + this.getgamesPlayed() + ", " +
+                "\"highscore\": " + this.getHighscore() + ", " +
+                "\"showOnLeaderboard\": " + this.isshowOnLeaderboard() + ", " +
+                "\"maxWords\": " + this.getMaxWords() + ", " +
+                "\"minTime\": \"" + this.getMinTime() + "\"" +
+                "}";
+    }
+
     public String getMinTime() {
         return minTime;
     }
