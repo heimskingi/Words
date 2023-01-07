@@ -88,7 +88,7 @@ public class Game extends AppCompatActivity {
             }
 
             public void onFinish() {
-                timer.setText("done!");
+                displayScore();
             }
 
         }.start();
@@ -110,12 +110,13 @@ public class Game extends AppCompatActivity {
     }
     String New="";
     int tries = 0;
+    int Words = 0;
     int Score = 0;
-
     public void update(String one, int NumOfLetters, String two,View view){
         New+=one;
         engTextView.setText(New);
         tries++;
+        Score++;
         testTry(tries, NumOfLetters, New, two, view);
     }
 
@@ -127,11 +128,12 @@ public class Game extends AppCompatActivity {
             Toast.makeText(Game.this,
                     "Maximum letters reached", Toast.LENGTH_LONG).show();
             engTextView.setText("Game Over");
+            Score=0;
         }
     }
     public void compare(String one, String two,View view){
         if(one.equals(two)){
-            Score++;
+            Words++;
             Toast.makeText(Game.this,
                     "Nice", Toast.LENGTH_LONG).show();
             newWord(view);
@@ -187,12 +189,16 @@ public class Game extends AppCompatActivity {
                 String idk = selectedItem.toString().toUpperCase();
                 int length = word.englishWord.length();
                 update(idk, length, word.getEnglishWord().toUpperCase(), view);
-
             }
 
         });
         tries = 0;
         New="";
+    }
+
+    public void displayScore(){
+        Toast.makeText(Game.this,
+                "Words: "+Words+"  " + "Score: "+Score, Toast.LENGTH_LONG).show();
     }
 
 
