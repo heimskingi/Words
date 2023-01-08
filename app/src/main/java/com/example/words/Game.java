@@ -38,7 +38,6 @@ public class Game extends AppCompatActivity {
         SharedPreferences sharedPref =  getSharedPreferences("preferences", Context.MODE_PRIVATE);
         String username = sharedPref.getString("username", "");
         User user = db.getUser(username);
-        db.updateUser(user);
         int highscore = user.getHighscore();
         ArrayList<Word> words = db.getWordsByLevel(level);
         char[] chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray();
