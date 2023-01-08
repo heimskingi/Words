@@ -94,7 +94,6 @@ public class Game extends AppCompatActivity {
             public void onFinish() {
                 displayScore();
                 int newHighScore = 0;
-                engTextView.setText("Game Over");
                 if(newHighScore(Score, highscore)){
                     newHighScore=Score;
                 }
@@ -103,7 +102,9 @@ public class Game extends AppCompatActivity {
                 gamesPlayed++;
                 user.gamesPlayed=gamesPlayed;
                 user.maxWords=Words;
-                db.updateUser(user);
+                if(db.updateUser(user)){
+                    engTextView.setText("Nice job");
+                };
 
             }
 
