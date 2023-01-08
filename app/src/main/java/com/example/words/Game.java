@@ -2,6 +2,7 @@ package com.example.words;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -10,10 +11,10 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.content.SharedPreferences;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Locale;
 import java.util.Random;
 
 public class Game extends AppCompatActivity {
@@ -21,7 +22,7 @@ public class Game extends AppCompatActivity {
     TextView wordTextView, engTextView;
     ListView lettersListView;
     TextView timer;
-
+    SharedPreferences sharedPref;
 
 
     @Override
@@ -34,6 +35,11 @@ public class Game extends AppCompatActivity {
         lettersListView = findViewById(R.id.listViewLetters);
         int level = getIntent().getExtras().getInt("level", 1);
         Database db = new Database(Game.this);
+        SharedPreferences sharedPref =  getSharedPreferences("preferences", Context.MODE_PRIVATE);
+        String username = sharedPref.getString("username", "");
+        User user = db.getUser(username);
+        db.updateUser(user);
+        int highscore = user.getHighscore();
         ArrayList<Word> words = db.getWordsByLevel(level);
         char[] chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray();
 
@@ -86,9 +92,20 @@ public class Game extends AppCompatActivity {
                 timer.setText("" + millisUntilFinished / 1000);
                 // logic to set the EditText could go here
             }
-
             public void onFinish() {
                 displayScore();
+                int newHighScore = 0;
+                engTextView.setText("Game Over");
+                if(newHighScore(Score, highscore)){
+                    newHighScore=Score;
+                }
+                user.highscore=newHighScore;
+                int gamesPlayed = user.getgamesPlayed();
+                gamesPlayed++;
+                user.gamesPlayed=gamesPlayed;
+                user.maxWords=Words;
+                db.updateUser(user);
+
             }
 
         }.start();
@@ -199,6 +216,19 @@ public class Game extends AppCompatActivity {
     public void displayScore(){
         Toast.makeText(Game.this,
                 "Words: "+Words+"  " + "Score: "+Score, Toast.LENGTH_LONG).show();
+    }
+
+    public boolean newHighScore(int older, int newer){
+        if(older>newer) {
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+
+    public void pushResults(String username){
+
     }
 
 
