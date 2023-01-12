@@ -135,7 +135,6 @@ public class LeaderBoard extends AppCompatActivity {
                     SharedPreferences.Editor editor = sharedPref.edit();
                     editor.putString("eTagUsers" , eTag);
                     editor.apply();
-                    db.dropPreviousData(Constants.UserTable.TABLE_NAME);
                 }
             }
             return usersData;
@@ -146,6 +145,8 @@ public class LeaderBoard extends AppCompatActivity {
             if (s == null) {
                 Toast.makeText(LeaderBoard.this, "No data", Toast.LENGTH_SHORT).show();
             }else{
+                Database db = new Database(LeaderBoard.this);
+                db.dropPreviousData(Constants.UserTable.TABLE_NAME);
                 populateDB = new PopulateDB(LeaderBoard.this);
                 populateDB.populateDatabaseWithUsers(usersData);
                 PopulateListView();
