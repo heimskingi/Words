@@ -1,5 +1,6 @@
 package com.example.words;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +18,7 @@ public class LeaderboardListAdapter  extends ArrayAdapter<User> {
         super(context, R.layout.leaderboard_list_item, arrayList);
     }
 
+    @SuppressLint("SetTextI18n")
     public View getView(int position, @Nullable View convertView, ViewGroup parent) {
 
         User u = (User) getItem(position);
@@ -25,10 +27,10 @@ public class LeaderboardListAdapter  extends ArrayAdapter<User> {
         }
         TextView username = convertView.findViewById(R.id.usernameLeaderboard);
         TextView words = convertView.findViewById(R.id.wordsLeaderboard);
-        TextView time = convertView.findViewById(R.id.timeLeaderboard);
+        TextView highscore = convertView.findViewById(R.id.highsoreLeaderboard);
         username.setText(u.getUsername());
-        words.setText(String.valueOf(u.getMaxWords()));
-        time.setText(u.getMinTime());
+        words.setText(u.getMaxWords() + "\nwords");
+        highscore.setText(u.getHighscore() + "\npoints");
 
         return convertView;
     }

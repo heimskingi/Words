@@ -11,16 +11,26 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 
 public class UserLogin extends AppCompatActivity {
 
     EditText usernameEditText;
     User user;
+    ArrayList<User> users;
     URL url;
     HttpURLConnection connection;
 
@@ -29,6 +39,8 @@ public class UserLogin extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_login);
         usernameEditText = findViewById(R.id.editTextUsername);
+        DownloadUsersFromApi downloadUsers = new DownloadUsersFromApi();
+        downloadUsers.execute();
     }
 
     public void openDifficulty(View view) {
@@ -52,6 +64,7 @@ public class UserLogin extends AppCompatActivity {
         }else {
             user = new User(username);
             boolean success = db.addUser(user);
+            users = db.getUsers();
             SendNewUserToApi sendNewUserToApi = new SendNewUserToApi();
             sendNewUserToApi.execute();
             if (!success) {
@@ -78,7 +91,17 @@ public class UserLogin extends AppCompatActivity {
                 connection.setRequestProperty("X-Access-Key", Constants.ApiKeys.X_ACCESS_KEY);
                 connection.setRequestProperty("Content-Type", "application/json");
 
-                String payload =  user.toJSON() ; //TODO pass all users
+                String payload =  "[" ;
+                for (int i = 0; i < users.size(); i++){
+                    payload += users.get(i).toJSON();
+                    if(i != users.size() - 1 ){
+                        payload += ",";
+                    }
+                    else{
+                        payload += "]";
+                    }
+                }
+
                 connection.setDoOutput(true);
                 OutputStream outputStream = connection.getOutputStream();
                 byte[] requestBody = payload.getBytes();
@@ -108,4 +131,79 @@ public class UserLogin extends AppCompatActivity {
         }
 
     }
+
+    private class DownloadUsersFromApi extends AsyncTask<String, Void, String> {
+
+        String data = "", usersData = "";
+        InputStream inputStream;
+        PopulateDB populateDB = new PopulateDB(UserLogin.this);
+
+        @Override
+        protected String doInBackground(String... strings) {
+            data = "";
+
+            try {
+                url = new URL(Constants.ApiKeys.usersApiUrl);
+                connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestMethod("GET");
+                connection.setRequestProperty("X-Master-Key", Constants.ApiKeys.X_MASTER_KEY);
+                connection.setRequestProperty("X-Access-Key", Constants.ApiKeys.X_ACCESS_KEY);
+                connection.connect();
+                if (connection.getResponseCode() != HttpURLConnection.HTTP_OK)
+                    return "Server response:" + connection.getResponseMessage();
+
+                inputStream = connection.getInputStream();
+                if (inputStream == null) {
+                    return null;
+                }
+                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+                String oneLine;
+                while ((oneLine = reader.readLine()) != null) {
+                    data += oneLine;
+                }
+                if (data.length() == 0) {
+                    return null;
+                } else {
+                    try {
+                        JSONObject jsonObject = new JSONObject(data);
+                        JSONArray jsonArray = jsonObject.optJSONArray("record");
+                        if (jsonArray != null) {
+                            usersData = jsonArray.toString();
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    if (inputStream != null) {
+                        inputStream.close();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                if (connection != null) {
+                    connection.disconnect();
+                }
+            }
+            return usersData;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            if (s == null) {
+                Toast.makeText(UserLogin.this, "No data", Toast.LENGTH_SHORT).show();
+            }else{
+                populateDB.populateDatabaseWithUsers(usersData);
+            }
+        }
+
+    }
+
 }

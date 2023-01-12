@@ -3,14 +3,28 @@ package com.example.words;
 import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.example.words.Constants.*;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 
 import kotlin.reflect.KFunction;
@@ -93,7 +107,8 @@ public class Database extends SQLiteOpenHelper {
                 User u = new User();
                 u.setUsername(c.getString(c.getColumnIndex(UserTable.COLUMN_USERNAME)));
                 u.setgamesPlayed(c.getInt(c.getColumnIndex(UserTable.COLUMN_GAMES_PLAYED)));
-                u.setshowOnLeaderboard(Boolean.parseBoolean(c.getString(c.getColumnIndex(UserTable.COLUMN_SHOW_ON_LEADERBOARD))));
+                boolean show = c.getInt(c.getColumnIndex(UserTable.COLUMN_SHOW_ON_LEADERBOARD)) > 0;
+                u.setshowOnLeaderboard(show);
                 u.setMaxWords(c.getInt(c.getColumnIndex(UserTable.COLUMN_MAX_WORDS)));
                 u.setHighscore(c.getInt(c.getColumnIndex(UserTable.COLUMN_HIGHSCORE)));
                 u.setMinTime(c.getString(c.getColumnIndex(UserTable.COLUMN_MIN_TIME)));
@@ -178,13 +193,6 @@ public class Database extends SQLiteOpenHelper {
         return insert != -1;
     }
 
-    public boolean deleteOneWord(int id){
-        SQLiteDatabase db = this.getWritableDatabase();
-        String query = "DELETE FROM " + WordsTable.TABLE_NAME + " WHERE " + WordsTable._ID + " = " + id;
-        Cursor cursor = db.rawQuery(query,null);
-        return !cursor.moveToFirst();
-    }
-
     @SuppressLint("Range")
     public ArrayList<Word> getWordsByLevel(int level){
         ArrayList<Word> list =new ArrayList<>();
@@ -202,6 +210,29 @@ public class Database extends SQLiteOpenHelper {
                w.setSerbianWord(c.getString(c.getColumnIndex(WordsTable.COLUMN_SERBIAN_WORD)));
                w.setWordPoints(c.getInt(c.getColumnIndex(WordsTable.COLUMN_WORD_POINTS)));
                list.add(w);
+            } while (c.moveToNext());
+        }
+        c.close();
+
+        return list;
+    }
+
+    @SuppressLint("Range")
+    public ArrayList<User> getUsers(){
+        ArrayList<User> list =new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c=db.rawQuery("SELECT * FROM " + UserTable.TABLE_NAME,null);
+        if(c.moveToFirst()) {
+            do {
+                User u = new User();
+                u.setUsername(c.getString(c.getColumnIndex(UserTable.COLUMN_USERNAME)));
+                u.setgamesPlayed(c.getInt(c.getColumnIndex(UserTable.COLUMN_GAMES_PLAYED)));
+                boolean show = c.getInt(c.getColumnIndex(UserTable.COLUMN_SHOW_ON_LEADERBOARD)) > 0;
+                u.setshowOnLeaderboard(show);
+                u.setMaxWords(c.getInt(c.getColumnIndex(UserTable.COLUMN_MAX_WORDS)));
+                u.setHighscore(c.getInt(c.getColumnIndex(UserTable.COLUMN_HIGHSCORE)));
+                u.setMinTime(c.getString(c.getColumnIndex(UserTable.COLUMN_MIN_TIME)));
+                list.add(u);
             } while (c.moveToNext());
         }
         c.close();

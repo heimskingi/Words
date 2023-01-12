@@ -28,7 +28,6 @@ public class LeaderBoard extends AppCompatActivity {
 
     ListView listView;
     String usersData = "", data = "", eTag = "";
-    boolean newUsers = false, emptyUsers = false;
     URL url;
     InputStream inputStream;
     HttpURLConnection connection;
@@ -41,15 +40,12 @@ public class LeaderBoard extends AppCompatActivity {
         setContentView(R.layout.activity_leader_board);
         listView = findViewById(R.id.leaderboardListView);
 
-        populateDB = new PopulateDB(LeaderBoard.this);
-
         boolean internetExists = InternetCheck.isInternetAvailable(LeaderBoard.this);
         if (internetExists) {
             DownloadUsers task2 = new DownloadUsers();
-            task2.execute(Constants.ApiKeys.usersApiUrl);
-        }else{
-            PopulateListView();
+            task2.execute();
         }
+        PopulateListView();
     }
 
     public void PopulateListView(){
@@ -78,11 +74,8 @@ public class LeaderBoard extends AppCompatActivity {
             sharedPref = getSharedPreferences("preferences", Context.MODE_PRIVATE);
             data = "";
             Database db = new Database(LeaderBoard.this);
-            if(db.tableCapacity(Constants.UserTable.TABLE_NAME) == 1){
-                emptyUsers = true;
-            }
             try {
-                url = new URL(strings[0]);
+                url = new URL(Constants.ApiKeys.usersApiUrl);
                 connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("GET");
                 connection.setRequestProperty("X-Master-Key", Constants.ApiKeys.X_MASTER_KEY);
@@ -142,7 +135,6 @@ public class LeaderBoard extends AppCompatActivity {
                     SharedPreferences.Editor editor = sharedPref.edit();
                     editor.putString("eTagUsers" , eTag);
                     editor.apply();
-                    newUsers = true;
                     db.dropPreviousData(Constants.UserTable.TABLE_NAME);
                 }
             }
@@ -154,13 +146,10 @@ public class LeaderBoard extends AppCompatActivity {
             if (s == null) {
                 Toast.makeText(LeaderBoard.this, "No data", Toast.LENGTH_SHORT).show();
             }else{
-                if(newUsers || emptyUsers){
-                    populateDB.populateDatabaseWithUsers(usersData);
-                    newUsers = false;
-                    emptyUsers = false;
-                }
+                populateDB = new PopulateDB(LeaderBoard.this);
+                populateDB.populateDatabaseWithUsers(usersData);
+                PopulateListView();
             }
-            PopulateListView();
         }
 
     }

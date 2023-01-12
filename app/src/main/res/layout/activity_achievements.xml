@@ -66,62 +66,11 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/games"
-        android:layout_width="280dp"
-        android:layout_height="40dp"
-        android:layout_gravity="center"
-        android:layout_marginTop="176dp"
-        android:fontFamily="@font/orbitron"
-        android:inputType="none"
-        android:text="@string/totalgames"
-        android:textAlignment="center"
-        android:textColor="#DB73FF"
-        android:textSize="25sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/mintime"
-        android:layout_width="280dp"
-        android:layout_height="40dp"
-        android:layout_gravity="center"
-        android:layout_marginTop="532dp"
-        android:fontFamily="@font/orbitron"
-        android:inputType="none"
-        android:text="@string/mintime"
-        android:textAlignment="center"
-        android:textColor="#DB73FF"
-        android:textSize="25sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.503"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/myMinTime"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="560dp"
-        android:fontFamily="@font/orbitron"
-        android:inputType="none"
-        android:text="xx:xx"
-        android:textColor="#ffffff"
-        android:textSize="50sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
         android:id="@+id/maxwords"
         android:layout_width="280dp"
         android:layout_height="40dp"
         android:layout_gravity="center"
-        android:layout_marginTop="300dp"
+        android:layout_marginTop="344dp"
         android:fontFamily="@font/orbitron"
         android:inputType="none"
         android:text="@string/maxwords"
@@ -130,15 +79,33 @@
         android:textSize="25sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.503"
+        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/myMaxWords"
+        android:id="@+id/games"
+        android:layout_width="280dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="220dp"
+        android:fontFamily="@font/orbitron"
+        android:inputType="none"
+        android:text="@string/totalgames"
+        android:textAlignment="center"
+        android:textColor="#DB73FF"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.488"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/myGamesPlayed"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="328dp"
+        android:layout_marginTop="252dp"
         android:fontFamily="@font/orbitron"
         android:inputType="none"
         android:text="x"
@@ -146,7 +113,21 @@
         android:textSize="50sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/myHighscore"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="484dp"
+        android:fontFamily="@font/orbitron"
+        android:inputType="none"
+        android:text="x"
+        android:textColor="#ffffff"
+        android:textSize="50sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -155,7 +136,7 @@
         android:layout_width="280dp"
         android:layout_height="40dp"
         android:layout_gravity="center"
-        android:layout_marginTop="416dp"
+        android:layout_marginTop="460dp"
         android:fontFamily="@font/orbitron"
         android:inputType="none"
         android:text="@string/myhighscore"
@@ -164,15 +145,15 @@
         android:textSize="25sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintHorizontal_bias="0.488"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/myHighscore"
+        android:id="@+id/myMaxWords"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="440dp"
+        android:layout_marginTop="372dp"
         android:fontFamily="@font/orbitron"
         android:inputType="none"
         android:text="x"
@@ -180,35 +161,20 @@
         android:textSize="50sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.502"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/myGamesPlayed"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="208dp"
-        android:fontFamily="@font/orbitron"
-        android:inputType="none"
-        android:text="x"
-        android:textColor="#ffffff"
-        android:textSize="50sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Switch
         android:id="@+id/switchLB"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="80dp"
         android:background="@color/black"
-        android:padding="5dp"
+        android:paddingStart="40dp"
+        android:paddingEnd="30dp"
         android:text="@string/switchShowOnLB"
         android:textColor="#DB73FF"
         android:textSize="20sp"
+        android:theme="@style/SCBSwitch"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
