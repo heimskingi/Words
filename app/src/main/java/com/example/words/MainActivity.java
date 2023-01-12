@@ -7,18 +7,38 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
     RelativeLayout settingsLayout;
     ImageView settingsImage;
+    URL url;
+    InputStream inputStream;
+    HttpURLConnection connection;
+    SharedPreferences sharedPref;
+    PopulateDB populateDB;
+    String wordsData = "", data = "", eTag = "";
+    boolean newWords = false, emptyWords = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,4 +115,103 @@ public class MainActivity extends AppCompatActivity {
         startActivity(refresh);
         overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
     }
+
+    public void checkForRefresh(View view) {
+        RefreshWords refreshWords = new RefreshWords();
+        refreshWords.execute();
+    }
+
+    private class RefreshWords extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected String doInBackground(String... strings) {
+            sharedPref = getSharedPreferences("preferences", Context.MODE_PRIVATE);
+            data = "";
+
+            try {
+                url = new URL(Constants.ApiKeys.wordsApiUrl);
+                connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestMethod("GET");
+                connection.setRequestProperty("X-Master-Key", Constants.ApiKeys.X_MASTER_KEY);
+                connection.setRequestProperty("X-Access-Key", Constants.ApiKeys.X_ACCESS_KEY);
+                connection.connect();
+                if (connection.getResponseCode() != HttpURLConnection.HTTP_OK)
+                    return "Server response:" + connection.getResponseMessage();
+
+                eTag = connection.getHeaderField("ETag");
+                if (!sharedPref.contains("eTagWords")) {
+                    SharedPreferences.Editor editor = sharedPref.edit();
+                    editor.putString("eTagWords", eTag);
+                    editor.apply();
+                }
+
+                inputStream = connection.getInputStream();
+                if (inputStream == null) {
+                    return null;
+                }
+                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+                String oneLine;
+                while ((oneLine = reader.readLine()) != null) {
+                    data += oneLine;
+                }
+                if (data.length() == 0) {
+                    return null;
+                } else {
+                    try {
+                        JSONObject jsonObject = new JSONObject(data);
+                        JSONArray jsonArray = jsonObject.optJSONArray("record");
+                        if (jsonArray != null) {
+                            wordsData = jsonArray.toString();
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    if (inputStream != null) {
+                        inputStream.close();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                if (connection != null) {
+                    connection.disconnect();
+                }
+
+                if (!eTag.equals(sharedPref.getString("eTagWords", null))) {
+                    SharedPreferences.Editor editor = sharedPref.edit();
+                    editor.putString("eTagWords", eTag);
+                    editor.apply();
+                    newWords = true;
+                    Database db = new Database(MainActivity.this);
+                    db.dropPreviousData(Constants.WordsTable.TABLE_NAME);
+                }
+            }
+            return data;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            if (s == null) {
+                Toast.makeText(MainActivity.this, "No data", Toast.LENGTH_SHORT).show();
+            }else{
+                if (newWords || emptyWords){
+                    populateDB = new PopulateDB(MainActivity.this);
+                    populateDB.populateDatabaseWithWords(wordsData);
+                    emptyWords = false;
+                    newWords = false;
+                    Toast.makeText(MainActivity.this, "Words have been updated!", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
+
+    }
+
 }

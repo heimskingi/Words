@@ -132,7 +132,8 @@
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:onClick="checkForRefresh"/>
 
         <ImageButton
             android:id="@+id/refreshButton"
@@ -144,7 +145,8 @@
             android:background="@android:color/transparent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/refresh" />
+            app:srcCompat="@drawable/refresh"
+            android:onClick="checkForRefresh"/>
 
         <TextView
             android:id="@+id/language"
