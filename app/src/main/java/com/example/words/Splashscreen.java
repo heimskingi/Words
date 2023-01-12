@@ -117,7 +117,7 @@ public class Splashscreen extends AppCompatActivity {
                 String sh = sharedPref.getString("eTagWords", null);
                 Log.println(Log.INFO, "tag", eTag);
                 Log.println(Log.INFO, "sh", sh);
-                if(eTag != sh){
+                if(!eTag.equals(sh)){
                     sendNotification = true;
                 }
 
