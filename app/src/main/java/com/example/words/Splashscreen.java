@@ -31,7 +31,7 @@ import java.util.Locale;
 public class Splashscreen extends AppCompatActivity {
 
     String wordsData = "", data = "", eTag = "";
-    boolean newWords = false, emptyWords = false;
+    boolean emptyWords = false, sendNotification = false;
     URL url;
     InputStream inputStream;
     HttpURLConnection connection;
@@ -41,7 +41,7 @@ public class Splashscreen extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_splashscreen);
+        setContentView(R.layout.splashscreen);
 
         Database db = new Database(Splashscreen.this);
         sharedPref = getSharedPreferences("preferences", Context.MODE_PRIVATE);
@@ -85,6 +85,7 @@ public class Splashscreen extends AppCompatActivity {
             startActivity(i);
         } else {
             Intent i = new Intent(Splashscreen.this, Difficulty.class);
+            i.putExtra("notification", sendNotification);
             startActivity(i);
         }
     }
@@ -112,6 +113,16 @@ public class Splashscreen extends AppCompatActivity {
                     SharedPreferences.Editor editor = sharedPref.edit();
                     editor.putString("eTagWords", eTag);
                     editor.apply();
+                }
+                String sh = sharedPref.getString("eTagWords", null);
+                Log.println(Log.INFO, "tag", eTag);
+                Log.println(Log.INFO, "sh", sh);
+                if(eTag != sh){
+                    sendNotification = true;
+                }
+
+                if (!eTag.equals(sharedPref.getString("eTagWords", null))) {
+                    sendNotification = true;
                 }
 
                 inputStream = connection.getInputStream();
@@ -153,15 +164,6 @@ public class Splashscreen extends AppCompatActivity {
                 if (connection != null) {
                     connection.disconnect();
                 }
-
-                if (!eTag.equals(sharedPref.getString("eTagWords", null))) {
-                    SharedPreferences.Editor editor = sharedPref.edit();
-                    editor.putString("eTagWords", eTag);
-                    editor.apply();
-                    newWords = true;
-                    Database db = new Database(Splashscreen.this);
-                    db.dropPreviousData(Constants.WordsTable.TABLE_NAME);
-                }
             }
             return data;
         }
@@ -171,10 +173,9 @@ public class Splashscreen extends AppCompatActivity {
             if (s == null) {
                 Toast.makeText(Splashscreen.this, "No data", Toast.LENGTH_SHORT).show();
             }else{
-                if (newWords || emptyWords){
+                if (emptyWords){
                     populateDB.populateDatabaseWithWords(wordsData);
                     emptyWords = false;
-                    newWords = false;
                 }
             }
         }

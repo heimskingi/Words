@@ -5,13 +5,33 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageButton;
+import android.widget.TextView;
+import android.widget.Toast;
 
 public class Difficulty extends AppCompatActivity {
+
+    TextView notificationTextView;
+    ImageButton exit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_difficulty);
+
+        notificationTextView = findViewById(R.id.textViewNotification);
+        exit = findViewById(R.id.exitButtonNotification);
+
+        Intent intent = getIntent();
+        if(intent.getExtras() != null) {
+            boolean sendNotification = intent.getExtras().getBoolean("notification", false);
+            String notification = "New words available! Go to 'menu' -> 'settings' -> 'refresh words' to get them!";
+            if (sendNotification) {
+                notificationTextView.setText(notification);
+                notificationTextView.setVisibility(View.VISIBLE);
+                exit.setVisibility(View.VISIBLE);
+            }
+        }
     }
 
     public void openGame(View view) {
@@ -37,5 +57,10 @@ public class Difficulty extends AppCompatActivity {
         Intent i = new Intent(Difficulty.this, MainActivity.class);
         startActivity(i);
         overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+    }
+
+    public void exitMenu(View view) {
+        exit.setVisibility(View.INVISIBLE);
+        notificationTextView.setVisibility(View.INVISIBLE);
     }
 }
