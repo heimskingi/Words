@@ -68,8 +68,11 @@ public class Achievements extends AppCompatActivity {
                     Toast.makeText(Achievements.this, "Could not save changes to your profile. Please try again!", Toast.LENGTH_LONG).show();
                 }
             }
-            UpdateUser updateUser = new UpdateUser(); // TODO why ne radi??????
-            updateUser.execute();
+            boolean internetExists = InternetCheck.isInternetAvailable(Achievements.this);
+            if (internetExists) {
+                UpdateUser updateUser = new UpdateUser(); // TODO why ne radi??????
+                updateUser.execute();
+            }
         });
     }
 

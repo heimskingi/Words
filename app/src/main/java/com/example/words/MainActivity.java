@@ -117,8 +117,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void checkForRefresh(View view) {
-        RefreshWords refreshWords = new RefreshWords();
-        refreshWords.execute();
+        boolean internetExists = InternetCheck.isInternetAvailable(MainActivity.this);
+        if (internetExists) {
+            RefreshWords refreshWords = new RefreshWords();
+            refreshWords.execute();
+        }
+        else{
+            Toast.makeText(MainActivity.this, "You can refresh words only if your internet is on!", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private class RefreshWords extends AsyncTask<String, Void, String> {

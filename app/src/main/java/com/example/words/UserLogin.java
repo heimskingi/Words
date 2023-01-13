@@ -65,8 +65,11 @@ public class UserLogin extends AppCompatActivity {
             user = new User(username);
             boolean success = db.addUser(user);
             users = db.getUsers();
-            SendNewUserToApi sendNewUserToApi = new SendNewUserToApi();
-            sendNewUserToApi.execute();
+            boolean internetExists = InternetCheck.isInternetAvailable(UserLogin.this);
+            if (internetExists) {
+                SendNewUserToApi sendNewUserToApi = new SendNewUserToApi();
+                sendNewUserToApi.execute();
+            }
             if (!success) {
                 Toast.makeText(UserLogin.this, "Could not make your profile. Please try again!", Toast.LENGTH_LONG).show();
             } else {
