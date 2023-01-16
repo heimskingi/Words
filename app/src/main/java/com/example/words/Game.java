@@ -40,6 +40,7 @@ public class Game extends AppCompatActivity {
         wordTextView = findViewById(R.id.word);
         engTextView = findViewById(R.id.wordEng);
         timer = findViewById(R.id.time);
+        TextView gameOver = findViewById(R.id.gameOver);
         lettersListView = findViewById(R.id.listViewLetters);
         int level = getIntent().getExtras().getInt("level", 1);
         Database db = new Database(Game.this);
@@ -83,28 +84,31 @@ public class Game extends AppCompatActivity {
 
         int timer_length;
         if (level==1){
-            timer_length=20000;
+            timer_length=15000;
         }else if (level==2){
-            timer_length=16000;
+            timer_length=60000;
         }else{
-            timer_length=12000;
+            timer_length=50000;
         }
-        new CountDownTimer(timer_length, 1000) {
+        CountDownTimer tm = new CountDownTimer(timer_length, 1000) {
 
             @SuppressLint("SetTextI18n")
             public void onTick(long millisUntilFinished) {
                 String zeros;
-                if(millisUntilFinished/1000 < 10 ){
-                    zeros = "00:0";
+
+                    if (millisUntilFinished / 1000 < 10) {
+                        zeros = "00:0";
+                    } else {
+                        zeros = "00:";
+                    }
+                    timer.setText(zeros + millisUntilFinished / 1000);
+
                 }
-                else{
-                    zeros = "00:";
-                }
-                timer.setText(zeros + millisUntilFinished / 1000);
-            }
+
+
+
 
             public void onFinish() {
-                displayScore();
                 int newHighScore = 0;
                 if(newHighScore(Score, highscore)){
                     newHighScore=Score;
@@ -127,11 +131,14 @@ public class Game extends AppCompatActivity {
                 if(db.updateUser(user)){
                     UpdateUserToApi updateUser = new UpdateUserToApi();
                     updateUser.execute();
-                    engTextView.setText("Nice job"); // TODO display this better
+                    engTextView.setText("Score: "+Score+" "+ "Words: "+ Words);
+                    gameOver.setText("Nice job");
+                    timer.setText("");
+                    wordTextView.setText("");
                 }
             }
-        }.start();
-
+        };
+        tm.start();
         lettersListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -139,8 +146,15 @@ public class Game extends AppCompatActivity {
                 String idk = selectedItem.toString().toUpperCase();
                 int length = word.englishWord.length();
                 update(idk, length, word.getEnglishWord().toUpperCase(), view);
+                String omg = (String) engTextView.getText();
+                if(omg=="Game Over!"){
+                    tm.cancel();
+                    timer.setText("");
+                    wordTextView.setText("");
+                }
             }
         });
+
     }
 
     String New="";
@@ -163,8 +177,8 @@ public class Game extends AppCompatActivity {
         if(trying>NumOfLetters){
             Toast.makeText(Game.this,
                     "Maximum letters reached", Toast.LENGTH_LONG).show();
-            timer.setText("00:00");
             engTextView.setText("Game Over!"); //TODO display better
+
             Score=0;
         }
     }
@@ -176,9 +190,16 @@ public class Game extends AppCompatActivity {
         }
         else{
             //TODO stop the game
-            timer.setText("00:00");
             engTextView.setText("Game Over!");
         }
+    }
+    public boolean JesusChrist(){
+        String sharedFact = engTextView.getText().toString();
+        boolean value=false;
+        if(sharedFact.contains("Game Over!")){
+            value=true;
+        }
+        return value;
     }
 
     public void newWord(View view){
@@ -229,11 +250,6 @@ public class Game extends AppCompatActivity {
         New="";
     }
 
-    public void displayScore(){
-        //TODO change score display
-        Toast.makeText(Game.this,
-                "Words: "+Words+"  " + "Score: "+Score, Toast.LENGTH_LONG).show();
-    }
 
     public boolean newHighScore(int older, int newer){
         if(older>newer) {
