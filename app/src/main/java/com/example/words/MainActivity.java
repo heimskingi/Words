@@ -119,6 +119,7 @@ public class MainActivity extends AppCompatActivity {
     public void checkForRefresh(View view) {
         boolean internetExists = InternetCheck.isInternetAvailable(MainActivity.this);
         if (internetExists) {
+            Toast.makeText(MainActivity.this,"Download has begun!", Toast.LENGTH_SHORT).show();
             RefreshWords refreshWords = new RefreshWords();
             refreshWords.execute();
         }

@@ -70,7 +70,7 @@ public class Achievements extends AppCompatActivity {
             }
             boolean internetExists = InternetCheck.isInternetAvailable(Achievements.this);
             if (internetExists) {
-                UpdateUser updateUser = new UpdateUser(); // TODO why ne radi??????
+                UpdateUser updateUser = new UpdateUser();
                 updateUser.execute();
             }
         });

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name" translatable="false">Words</string>
+    <string name="app_name" translatable="false">Worderland</string>
     <string name="home">Start game</string>
     <string name="leaderboard">Leaderboard</string>
     <string name="myAchivements">My Scores</string>

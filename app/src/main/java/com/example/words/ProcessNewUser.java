@@ -8,8 +8,6 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -26,68 +24,49 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 
-public class UserLogin extends AppCompatActivity {
+public class ProcessNewUser extends AppCompatActivity {
 
-    EditText usernameEditText;
-    User user;
-    ArrayList<User> users;
+    ArrayList<User> usersList;
     URL url;
     HttpURLConnection connection;
+    User newUser;
+    String usersData = "", data = "", eTag = "";
+    InputStream inputStream;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_user_login);
-        usernameEditText = findViewById(R.id.editTextUsername);
-        DownloadUsersFromApi downloadUsers = new DownloadUsersFromApi();
-        downloadUsers.execute();
-    }
+        setContentView(R.layout.activity_process_new_user);
 
-    public void openDifficulty(View view) {
-        Intent i = new Intent(UserLogin.this, Difficulty.class);
-        startActivity(i);
-        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-    }
-
-    public void openMenu(View view) {
-        Intent i = new Intent(UserLogin.this, MainActivity.class);
-        startActivity(i);
-        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
-    }
-
-    public void insertUser(View view) {
-        String username = String.valueOf(usernameEditText.getText());
-        Database db = new Database(UserLogin.this);
-        if(db.doesUserExists(username)){
-            Toast.makeText(UserLogin.this,"User with same username already exists. Please try something else.", Toast.LENGTH_LONG).show();
-            usernameEditText.setText("");
-        }else {
-            user = new User(username);
-            boolean success = db.addUser(user);
-            users = db.getUsers();
-            boolean internetExists = InternetCheck.isInternetAvailable(UserLogin.this);
-            if (internetExists) {
-                SendNewUserToApi sendNewUserToApi = new SendNewUserToApi();
-                sendNewUserToApi.execute();
-            }else{
-                SharedPreferences sharedPref = getSharedPreferences("preferences", Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPref.edit();
-                editor.putString("newUser", username);
-                editor.apply();
-            }
-            if (!success) {
-                Toast.makeText(UserLogin.this, "Could not make your profile. Please try again!", Toast.LENGTH_LONG).show();
-            } else {
-                SharedPreferences sharedPref = getSharedPreferences("preferences", Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPref.edit();
-                editor.putString("username", username);
-                editor.apply();
-                Toast.makeText(UserLogin.this, "Successfully created account!", Toast.LENGTH_SHORT).show();
-            }
+        Database db = new Database(ProcessNewUser.this);
+        SharedPreferences sharedPref =  getSharedPreferences("preferences", Context.MODE_PRIVATE);
+        boolean internetExists = InternetCheck.isInternetAvailable(ProcessNewUser.this);
+        if (internetExists) {
+            newUser = db.getUser(sharedPref.getString("newUser", ""));
+            DownloaddUsers task2 = new DownloaddUsers();
+            task2.execute();
         }
+        Intent i = new Intent(ProcessNewUser.this, Difficulty.class);
+        startActivity(i);
     }
 
-    private class SendNewUserToApi extends AsyncTask<String, Void, String> {
+    public void insertUsers(String users){
+        Database db = new Database(ProcessNewUser.this);
+        db.dropPreviousData(Constants.UserTable.TABLE_NAME);
+        PopulateDB populateDB = new PopulateDB(ProcessNewUser.this);
+        populateDB.populateDatabaseWithUsers(users);
+        usersList = db.getUsers();
+        Toast.makeText(ProcessNewUser.this, String.valueOf(usersList.size()), Toast.LENGTH_LONG).show();
+        usersList.add(newUser);
+        sendData();
+    }
+
+    public void sendData(){
+        SendNewUser sendNewUser = new SendNewUser();
+        sendNewUser.execute();
+    }
+
+    private class SendNewUser extends AsyncTask<String, Void, String> {
 
         @Override
         protected String doInBackground(String... strings) {
@@ -100,9 +79,9 @@ public class UserLogin extends AppCompatActivity {
                 connection.setRequestProperty("Content-Type", "application/json");
 
                 String payload =  "[" ;
-                for (int i = 0; i < users.size(); i++){
-                    payload += users.get(i).toJSON();
-                    if(i != users.size() - 1 ){
+                for (int i = 0; i < usersList.size(); i++){
+                    payload += usersList.get(i).toJSON();
+                    if(i != usersList.size() - 1 ){
                         payload += ",";
                     }
                     else{
@@ -131,25 +110,24 @@ public class UserLogin extends AppCompatActivity {
         protected void onPostExecute(String s) {
             if (!s.equals("Success.")) {
                 try {
-                    Toast.makeText(UserLogin.this, "Couldn't send data! " + connection.getResponseMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ProcessNewUser.this, "Couldn't send data! " + connection.getResponseMessage(), Toast.LENGTH_SHORT).show();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+            }else{
+                SharedPreferences sharedPref =  getSharedPreferences("preferences", Context.MODE_PRIVATE);
+                sharedPref.edit().remove("newUser").apply();
             }
         }
 
     }
 
-    private class DownloadUsersFromApi extends AsyncTask<String, Void, String> {
-
-        String data = "", usersData = "";
-        InputStream inputStream;
-        PopulateDB populateDB = new PopulateDB(UserLogin.this);
+    private class DownloaddUsers extends AsyncTask<String, Void, String> {
 
         @Override
         protected String doInBackground(String... strings) {
+            SharedPreferences sharedPref = getSharedPreferences("preferences", Context.MODE_PRIVATE);
             data = "";
-
             try {
                 url = new URL(Constants.ApiKeys.usersApiUrl);
                 connection = (HttpURLConnection) url.openConnection();
@@ -159,6 +137,13 @@ public class UserLogin extends AppCompatActivity {
                 connection.connect();
                 if (connection.getResponseCode() != HttpURLConnection.HTTP_OK)
                     return "Server response:" + connection.getResponseMessage();
+
+                eTag = connection.getHeaderField("ETag");
+                if (!sharedPref.contains("eTagUsers")) {
+                    SharedPreferences.Editor editor = sharedPref.edit();
+                    editor.putString("eTagUsers", eTag);
+                    editor.apply();
+                }
 
                 inputStream = connection.getInputStream();
                 if (inputStream == null) {
@@ -199,6 +184,12 @@ public class UserLogin extends AppCompatActivity {
                 if (connection != null) {
                     connection.disconnect();
                 }
+
+                if (!eTag.equals(sharedPref.getString("eTagUsers", null))) {
+                    SharedPreferences.Editor editor = sharedPref.edit();
+                    editor.putString("eTagUsers" , eTag);
+                    editor.apply();
+                }
             }
             return usersData;
         }
@@ -206,9 +197,9 @@ public class UserLogin extends AppCompatActivity {
         @Override
         protected void onPostExecute(String s) {
             if (s == null) {
-                Toast.makeText(UserLogin.this, "No data", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ProcessNewUser.this, "No data", Toast.LENGTH_SHORT).show();
             }else{
-                populateDB.populateDatabaseWithUsers(usersData);
+                insertUsers(s);
             }
         }
 

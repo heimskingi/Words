@@ -83,7 +83,11 @@ public class Splashscreen extends AppCompatActivity {
         if (!sharedPref.contains("username")) {
             Intent i = new Intent(Splashscreen.this, UserLogin.class);
             startActivity(i);
-        } else {
+        } else if(sharedPref.contains("newUser")){
+            Intent i = new Intent(Splashscreen.this, ProcessNewUser.class);
+            startActivity(i);
+        }
+        else {
             Intent i = new Intent(Splashscreen.this, Difficulty.class);
             i.putExtra("notification", sendNotification);
             startActivity(i);
