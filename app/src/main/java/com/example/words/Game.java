@@ -84,14 +84,13 @@ public class Game extends AppCompatActivity {
 
         int timer_length;
         if (level==1){
-            timer_length=15000;
+            timer_length=30000;
         }else if (level==2){
-            timer_length=60000;
-        }else{
             timer_length=50000;
+        }else{
+            timer_length=60000;
         }
         CountDownTimer tm = new CountDownTimer(timer_length, 1000) {
-
             @SuppressLint("SetTextI18n")
             public void onTick(long millisUntilFinished) {
                 String zeros;
@@ -102,11 +101,7 @@ public class Game extends AppCompatActivity {
                         zeros = "00:";
                     }
                     timer.setText(zeros + millisUntilFinished / 1000);
-
                 }
-
-
-
 
             public void onFinish() {
                 int newHighScore = 0;
@@ -177,7 +172,7 @@ public class Game extends AppCompatActivity {
         if(trying>NumOfLetters){
             Toast.makeText(Game.this,
                     "Maximum letters reached", Toast.LENGTH_LONG).show();
-            engTextView.setText("Game Over!"); //TODO display better
+            engTextView.setText("Game Over!");
 
             Score=0;
         }
@@ -189,17 +184,8 @@ public class Game extends AppCompatActivity {
             newWord(view);
         }
         else{
-            //TODO stop the game
             engTextView.setText("Game Over!");
         }
-    }
-    public boolean JesusChrist(){
-        String sharedFact = engTextView.getText().toString();
-        boolean value=false;
-        if(sharedFact.contains("Game Over!")){
-            value=true;
-        }
-        return value;
     }
 
     public void newWord(View view){
